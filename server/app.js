@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const analyzeRoute = require("./routes/analyze");
+const grammerCheckRoute = require("./routes/grammercheck");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +14,7 @@ app.use(express.json()); //for parsing application/json
 
 // routes
 app.use("/api/analyze", analyzeRoute);
+app.use("/api/grammercheck", grammerCheckRoute);
 
 app.listen(PORT, () => {
     console.log(`AI Writing app listening at http://localhost:${PORT}`);
