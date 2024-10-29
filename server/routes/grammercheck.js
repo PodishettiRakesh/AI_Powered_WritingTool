@@ -13,13 +13,21 @@ grammerCheckRoute.post('/', async(req, res)=>{
             }
         });
 
-        const grammarErrors = response.data.matches.map(match => ({
-            message: match.message,
-            suggestions: match.replacements.map(rep => rep.value),
-            context: match.context.text
-        }));
+        // Extracting the corrected text
+        let correctedText = text;  // Start with the original text
+        let offset = 0;  // To keep track of text corrections
 
-        res.json({ grammarErrors });
+        response.data.matches.forEach(match => {
+            const replacement = match.replacements[0]?.value || '';  // Get the first suggestion
+            const start = match.offset + offset;  // Calculate the start index for replacement
+            const end = start + match.length;  // Calculate the end index for replacement
+
+            // Replace the incorrect part with the correct suggestion
+            correctedText = correctedText.slice(0, start) + replacement + correctedText.slice(end);
+            offset += replacement.length - match.length;  // Adjust the offset for the next replacement
+        });
+
+        res.json({ correctedText });
     } catch (error) {
         res.status(500).json({ message: "Error checking grammar", error: error.message });
     }
