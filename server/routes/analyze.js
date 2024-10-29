@@ -3,7 +3,7 @@ const analyzeRoute = express.Router();
 
 analyzeRoute.post('/', async(req, res)=>{
     res.json({
-        message: "Analyze route",
+        message: "Analyze route with thunder client",
     });
 });
 
